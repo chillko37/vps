@@ -1,18 +1,35 @@
 FROM ubuntu:22.04
+
 ENV DEBIAN_FRONTEND=noninteractive
+
+# Cài đặt múi giờ
 RUN echo "Asia/Ho_Chi_Minh" > /etc/timezone \
     && ln -fs /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime \
     && apt-get update \
     && apt-get install -y tzdata \
     && dpkg-reconfigure -f noninteractive tzdata
-RUN apt-get install -y \
+
+# Cài đặt các gói cần thiết
+RUN apt-get update && apt-get install -y \
     lxde-core \
     tightvncserver \
     xfce4-terminal \
     && apt-get clean
-RUN mkdir -p /root/.vnc && echo "yourpassword" | vncpasswd -f > /root/.vnc/passwd
-RUN chmod 600 /root/.vnc/passwd
+
+# Thiết lập cấu hình VNC
+RUN mkdir -p /root/.vnc \
+    && echo "yourpassword" | vncpasswd -f > /root/.vnc/passwd \
+    && chmod 600 /root/.vnc/passwd
+
+# Thiết lập biến môi trường USER
+ENV USER=root
+
+# Sao chép và phân quyền cho script khởi động
 COPY start-vnc.sh /start-vnc.sh
 RUN chmod +x /start-vnc.sh
+
+# Mở cổng VNC
 EXPOSE 5901
+
+# Chạy script khởi động
 CMD ["/start-vnc.sh"]
