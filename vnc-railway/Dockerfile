@@ -24,6 +24,12 @@ RUN mkdir -p /root/.vnc \
 # Thiết lập biến môi trường USER
 ENV USER=root
 
+# Cấu hình xstartup để chạy LXDE
+RUN echo "#!/bin/bash\n\
+xrdb \$HOME/.Xresources\n\
+startlxde &" > /root/.vnc/xstartup \
+    && chmod +x /root/.vnc/xstartup
+
 # Sao chép và phân quyền cho script khởi động
 COPY start-vnc.sh /start-vnc.sh
 RUN chmod +x /start-vnc.sh
