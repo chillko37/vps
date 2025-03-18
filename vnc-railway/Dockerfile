@@ -9,7 +9,7 @@ RUN echo "Asia/Ho_Chi_Minh" > /etc/timezone \
     && apt-get install -y tzdata \
     && dpkg-reconfigure -f noninteractive tzdata
 
-# Cài đặt các gói cần thiết, bao gồm trình duyệt để tránh lỗi lxde-x-www-browser.desktop
+# Cài đặt các gói cần thiết, bao gồm Firefox
 RUN apt-get update && apt-get install -y \
     lxde-core \
     tightvncserver \
